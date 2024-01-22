@@ -1,10 +1,12 @@
 import {Router} from 'express';
-import {Messages, MessagesWithoutId} from "../types";
+import {MessagesWithoutId} from "../types";
+import fileDb from "../fileDb";
 
 const messagesRouter = Router();
 
 messagesRouter.get("/", async (req, res) => {
-  res.send('messages get');
+  const messages = await fileDb.getItems();
+  res.send(messages);
 });
 
 messagesRouter.post("/", async (req, res) => {
@@ -12,7 +14,8 @@ messagesRouter.post("/", async (req, res) => {
     author: req.body.author,
     message: req.body.message,
   };
-  res.send('messages post');
+  const savedMessages = await fileDb.addItem(messages);
+  res.send(savedMessages);
 });
 
 export default messagesRouter;

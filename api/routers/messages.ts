@@ -9,16 +9,18 @@ messagesRouter.get("/", async (req, res) => {
   res.send(messages);
 });
 
-messagesRouter.post("/", async (req, res) => {
-  const messages: MessagesWithoutId = {
-    author: req.body.author,
-    message: req.body.message,
-  };
-  if(!messages) {
-    return res.status(422).send({error: 'Author and message must be present in the request'});
+messagesRouter.post("/", async (req, res, next) => {
+  try{
+    const author =  req.body.author;
+    const message =  req.body.message;
+    if(!author || !message) {
+      return res.status(422).send({error: 'Author and message must be present in the request'});
+    }
+    const savedMessages = await fileDb.addItem({author, message});
+    res.send(savedMessages);
+  }catch (e){
+    next(e);
   }
-  const savedMessages = await fileDb.addItem(messages);
-  res.send(savedMessages);
 });
 
 export default messagesRouter;

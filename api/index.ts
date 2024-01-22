@@ -3,7 +3,7 @@ import messagesRouter from "./routers/messages";
 import fileDb from "./fileDb";
 
 const app = express();
-const port = 8000;
+const port = 8001;
 
 app.use(express.json());
 app.use('/messages', messagesRouter);

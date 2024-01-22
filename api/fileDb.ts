@@ -15,11 +15,17 @@ const fileDb = {
     }
   },
   async getItems() {
-    return dataMessages;
+    return dataMessages.slice(-30);
   },
   async addItem(item: MessagesWithoutId) {
     const id = crypto.randomUUID();
-    const messages = {id, ...item};
+    const date = new Date().toString();
+    const messages = {
+      id,
+      date,
+      author: item.author,
+      message: item.message,
+    };
     dataMessages.push(messages);
     await this.save();
 
